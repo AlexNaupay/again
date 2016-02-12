@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+
+import click  # install: pip install click or sudo pip install click
+import os
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
+# global vars
+cwd = os.getcwd()  # current work directory
+
+
+@click.group(context_settings=CONTEXT_SETTINGS)
+@click.version_option(version='0.0.1')
+def main():  # main function
+    pass
+
+
+def static_actions(**kwargs):
+    static_dir = kwargs.get('static_dir')
+    if not os.path.isabs(static_dir):  # if it's not abaslute path
+        static_dir = os.path.join(cwd, static_dir)
+
+    if not os.path.exists(static_dir):
+        os.mkdir(static_dir)
+        print ('created: %s' % os.path.basename(static_dir))
+    if kwargs.get('js'):
+        path = os.path.join(static_dir, 'js')
+        if not os.path.exists(path):
+            os.mkdir(path)
+            print ('created: %s' % os.path.basename(path))
+        else:
+            print 'file %s exist, not action' % path
+    if kwargs.get('css'):
+        path = os.path.join(static_dir, 'css')
+        if not os.path.exists(path):
+            os.mkdir(path)
+            print ('created: %s' % os.path.basename(path))
+        else:
+            print 'file %s exist, not action' % path
+    if kwargs.get('img'):
+        path = os.path.join(static_dir, 'img')
+        if not os.path.exists(path):
+            os.mkdir(path)
+            print ('created: %s' % os.path.basename(path))
+        else:
+            print 'file %s exist, not action' % path
+    if kwargs.get('fonts'):
+        path = os.path.join(static_dir, 'fonts')
+        if not os.path.exists(path):
+            os.mkdir(path)
+            print ('created: %s' % os.path.basename(path))
+        else:
+            print 'file %s exist, not action' % path
+    print ('execute succesfull ...')
+
+
+@main.command()
+@click.option('--static_dir', default='static', help='name of static dir')
+@click.option('--js', is_flag=True, default=True, help='do not create js directory')
+@click.option('--css', is_flag=True, default=True, help='do not create css directory')
+@click.option('--img', is_flag=True, default=True, help='do not create img directory')
+@click.option('--fonts', is_flag=True, default=True, help='do not create fonts directory')
+def static(**kwargs):
+    static_actions(**kwargs)
+
+
+if __name__ == '__main__':
+    main()
